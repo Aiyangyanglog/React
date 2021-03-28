@@ -1,70 +1,71 @@
-# Getting Started with Create React App
+## 特点：
+* 声明式开发
+* 可以与其他框架并存
+* 组件化
+* 单向数据流
+* 视图层框架
+* 函数式编程
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 分析
+* 1.state数据
+* 2.JSX模板
+* 3.数据+模板 结合，生成真实的DOM，来显示
+* 4.state 发生改变
+* 5.数据+模板 结合，生成真实的DOM替换与原始的DOM
 
-## Available Scripts
+* 缺陷：
+* 第一次生成了一个完整的DOM片段
+* 第二次生成了一个完整的DOM片段
+* 第二次的DOM替换第一次的DOM,非常耗性能
 
-In the project directory, you can run:
+* 1.state数据
+* 2.JSX模板
+* 3.数据+模板 结合，生成真实的DOM，来显示
+* 4.state 发生改变
+* 5.数据+模板 结合，生成真实的DOM，并不直接替换原始的DOM
+* 6.新的DOM和原始的DOM做比对，找差异
+* 7.找出input框发生了变化
+* 8.只用新的DOM中的input元素，替换老的DOM中的input元素
 
-### `yarn start`
+* 缺陷：
+* 性能提升并不明显
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 虚拟DOM
+* 1.state数据
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+* 2.JSX模板
 
-### `yarn test`
+* 3.生成虚拟DOM(虚拟DOM就是一个js对象，用它来描述真实的DOM)
+* <div id='abc'><span>hello world</span></div>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* 4.用虚拟DOM的结构生成真实的DOM，来显示
+* ['div',{id: 'abc'},['span',{},'hello world']]
 
-### `yarn build`
+* 5.state发生变化
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* 6.数据+模板 生成新的虚拟DOM(极大的提升了性能)
+* ['div',{id: 'abc'},['span',{},'bye bye']]
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* 7.比较原始虚拟DOM和新的虚拟DOM的区别，找到区别是span中的内容(极大的提升了性能)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* 8.直接操作DOM,改变span中的内容
 
-### `yarn eject`
+* 优点：
+* 1.性能提升了
+* 2.他使得跨端应用得以实现， React Native
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+* diff 
+* setSate(异步)多次执行，只会生成一个虚拟DOM
+* 同层比对
+* 加key值，不要用index当key值
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+* 生命周期函数指在某一时刻组件自动调用执行的函数
+* 1.Initialization(constructor里面初始化props,state)
+* 2.Mounting(componentWillMount,render,componentDidMount)
+* 3.Updation
+* props改变(componentWillReceiveProps=>shouldComponentUpdate(true)=>componentWillUpdate=>render=>componentDidUpdate)
+* state改变(shouldComponentUpdate(true)=>componentWillUpdate=>render=>componentDidUpdate)
+* 4.Unmounting(componentWillUnmount)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* ajax请求放到componentDidMount里面比较合适
